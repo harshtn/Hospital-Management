@@ -1,0 +1,157 @@
+:root {
+    --primary: #1e40af;
+    --primary-dark: #1e3a8a;
+    --primary-light: #3b82f6;
+    --accent: #0d9488;
+    --emerald: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --info: #0284c7;
+    --dark: #0f172a;
+    --light-bg: #f8fafc;
+    --card-border: #e2e8f0;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background-color: var(--light-bg);
+    color: #334155;
+    min-height: 100vh;
+}
+
+.bg-primary-custom {
+    background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+}
+
+.bg-emerald {
+    background-color: #34d399 !important;
+}
+
+.btn-emerald {
+    background-color: #0d9488;
+    border-color: #0d9488;
+    color: #ffffff;
+}
+
+.btn-emerald:hover {
+    background-color: #0f766e;
+    border-color: #0f766e;
+    color: #ffffff;
+}
+
+.sidebar-wrapper {
+    width: 260px;
+    min-width: 260px;
+    min-height: calc(100vh - 56px);
+    background: #ffffff;
+    border-right: 1px solid var(--card-border);
+}
+
+.sidebar-nav .nav-link {
+    color: #475569;
+    padding: 0.75rem 1.25rem;
+    font-weight: 500;
+    font-size: 0.925rem;
+    display: flex;
+    align-items: center;
+    border-left: 3px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.sidebar-nav .nav-link:hover {
+    color: var(--primary);
+    background-color: #eff6ff;
+    border-left-color: var(--primary-light);
+}
+
+.sidebar-nav .nav-link.active {
+    color: var(--primary-dark);
+    font-weight: 600;
+    background-color: #dbeafe;
+    border-left-color: var(--primary);
+}
+
+.brand-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.15);
+    font-size: 1.25rem;
+}
+
+.stat-card {
+    border-radius: 14px;
+    border: 1px solid var(--card-border);
+    background: #ffffff;
+    padding: 1.25rem 1.5rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+}
+
+.table th {
+    font-weight: 600;
+    color: #475569;
+    font-size: 0.825rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    background-color: #f8fafc;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f1f5f9;
+}
+
+.badge {
+    padding: 0.4em 0.7em;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+}
+
+.content-wrapper {
+    overflow-x: hidden;
+}
+
+.avatar-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #e0e7ff;
+    color: #3730a3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.chart-card {
+    border-radius: 14px;
+    background: #ffffff;
+    border: 1px solid var(--card-border);
+}
+
+@media print {
+    .sidebar-wrapper, .navbar, .btn, .no-print {
+        display: none !important;
+    }
+    .content-wrapper {
+        padding: 0 !important;
+    }
+}

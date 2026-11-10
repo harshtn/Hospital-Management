@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} | HMS 2025{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-0" style="max-width: 900px;">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'patient_list' %}">Patients</a></li>
+            <li class="breadcrumb-item active">{{ title }}</li>
+        </ol>
+    </nav>
+
+    <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-header bg-white border-0 pt-4 px-4 pb-0">
+            <h4 class="fw-bold text-dark mb-1">{{ title }}</h4>
+            <p class="text-muted small mb-0">Fill in patient demographic and clinical information.</p>
+        </div>
+        <div class="card-body p-4">
+            <form method="POST" novalidate>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {% for err in form.non_field_errors %}{{ err }}<br>{% endfor %}
+                    </div>
+                {% endif %}
+
+                <!-- Section: Personal Information -->
+                <h5 class="fw-bold text-primary mb-3"><i class="bi bi-person me-2"></i>Personal Details</h5>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">First Name <span class="text-danger">*</span></label>
+                        {{ form.first_name }}
+                        {% if form.first_name.errors %}<div class="text-danger small mt-1">{{ form.first_name.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Last Name <span class="text-danger">*</span></label>
+                        {{ form.last_name }}
+                        {% if form.last_name.errors %}<div class="text-danger small mt-1">{{ form.last_name.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Gender <span class="text-danger">*</span></label>
+                        {{ form.gender }}
+                        {% if form.gender.errors %}<div class="text-danger small mt-1">{{ form.gender.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Date of Birth <span class="text-danger">*</span></label>
+                        {{ form.date_of_birth }}
+                        {% if form.date_of_birth.errors %}<div class="text-danger small mt-1">{{ form.date_of_birth.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Blood Group</label>
+                        {{ form.blood_group }}
+                        {% if form.blood_group.errors %}<div class="text-danger small mt-1">{{ form.blood_group.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Phone Number <span class="text-danger">*</span></label>
+                        {{ form.phone }}
+                        {% if form.phone.errors %}<div class="text-danger small mt-1">{{ form.phone.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Email Address</label>
+                        {{ form.email }}
+                        {% if form.email.errors %}<div class="text-danger small mt-1">{{ form.email.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label fw-semibold">Residential Address <span class="text-danger">*</span></label>
+                        {{ form.address }}
+                        {% if form.address.errors %}<div class="text-danger small mt-1">{{ form.address.errors.0 }}</div>{% endif %}
+                    </div>
+                </div>
+
+                <!-- Section: Emergency Contact -->
+                <h5 class="fw-bold text-primary mb-3"><i class="bi bi-shield-shaded me-2"></i>Emergency Contact</h5>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-5">
+                        <label class="form-label fw-semibold">Contact Name <span class="text-danger">*</span></label>
+                        {{ form.emergency_contact_name }}
+                        {% if form.emergency_contact_name.errors %}<div class="text-danger small mt-1">{{ form.emergency_contact_name.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Contact Phone <span class="text-danger">*</span></label>
+                        {{ form.emergency_contact_phone }}
+                        {% if form.emergency_contact_phone.errors %}<div class="text-danger small mt-1">{{ form.emergency_contact_phone.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Relationship</label>
+                        {{ form.emergency_contact_relation }}
+                    </div>
+                </div>
+
+                <!-- Section: Clinical & Background -->
+                <h5 class="fw-bold text-primary mb-3"><i class="bi bi-clipboard2-pulse me-2"></i>Medical Background</h5>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Known Allergies</label>
+                        {{ form.allergies }}
+                        <div class="form-text small text-muted">e.g. Penicillin, Peanuts, Latex</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Chronic Conditions</label>
+                        {{ form.chronic_conditions }}
+                        <div class="form-text small text-muted">e.g. Asthma, Diabetes, Hypertension</div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label fw-semibold">General Medical History</label>
+                        {{ form.medical_history }}
+                    </div>
+                </div>
+
+                <!-- Section: Insurance & Status -->
+                <h5 class="fw-bold text-primary mb-3"><i class="bi bi-building me-2"></i>Insurance & Status</h5>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Insurance Provider</label>
+                        {{ form.insurance_provider }}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Policy / Card Number</label>
+                        {{ form.insurance_policy_number }}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Patient Status</label>
+                        {{ form.status }}
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 pt-3 border-top">
+                    <a href="{% url 'patient_list' %}" class="btn btn-outline-secondary px-4">Cancel</a>
+                    <button type="submit" class="btn btn-primary px-4 fw-semibold">Save Patient Record</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

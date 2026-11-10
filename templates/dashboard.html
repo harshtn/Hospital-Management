@@ -1,0 +1,287 @@
+{% extends 'base.html' %}
+
+{% block title %}Executive Hospital Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-0">
+    <!-- Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+        <div>
+            <h3 class="fw-bold text-dark mb-1">Hospital Management Dashboard</h3>
+            <p class="text-muted mb-0">Overview of clinical operations, patient flow, and scheduling.</p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-white text-secondary border px-3 py-2 shadow-sm rounded-pill">
+                <i class="bi bi-clock me-1 text-primary"></i> {{ today|date:"l, F j, Y" }}
+            </span>
+            <a href="{% url 'appointment_create' %}" class="btn btn-primary px-3 shadow-sm rounded-pill">
+                <i class="bi bi-plus-circle me-1"></i> New Appointment
+            </a>
+        </div>
+    </div>
+
+    <!-- Stat Cards Row -->
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-xl-3">
+            <div class="stat-card shadow-sm h-100">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small fw-semibold text-uppercase">Total Patients</span>
+                        <h2 class="fw-bold text-dark mt-2 mb-0">{{ total_patients }}</h2>
+                        <span class="badge bg-primary-subtle text-primary mt-2">Active Registry</span>
+                    </div>
+                    <div class="stat-icon bg-primary-subtle text-primary">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-xl-3">
+            <div class="stat-card shadow-sm h-100">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small fw-semibold text-uppercase">Today's Visits</span>
+                        <h2 class="fw-bold text-dark mt-2 mb-0">{{ today_appointments_count }}</h2>
+                        <span class="badge bg-warning-subtle text-warning mt-2">{{ pending_appointments_count }} Scheduled</span>
+                    </div>
+                    <div class="stat-icon bg-warning-subtle text-warning">
+                        <i class="bi bi-calendar2-week"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-xl-3">
+            <div class="stat-card shadow-sm h-100">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small fw-semibold text-uppercase">Medical Staff</span>
+                        <h2 class="fw-bold text-dark mt-2 mb-0">{{ active_doctors }}</h2>
+                        <span class="badge bg-success-subtle text-success mt-2">{{ total_doctors }} Registered</span>
+                    </div>
+                    <div class="stat-icon bg-success-subtle text-success">
+                        <i class="bi bi-heart-pulse-fill"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-xl-3">
+            <div class="stat-card shadow-sm h-100">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small fw-semibold text-uppercase">Beds / Rooms</span>
+                        <h2 class="fw-bold text-dark mt-2 mb-0">{{ available_rooms }} <span class="fs-6 text-muted fw-normal">/ {{ total_rooms }}</span></h2>
+                        <span class="badge bg-info-subtle text-info mt-2">Available Now</span>
+                    </div>
+                    <div class="stat-icon bg-info-subtle text-info">
+                        <i class="bi bi-door-open-fill"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Shortcuts & Visual Analytics -->
+    <div class="row g-4 mb-4">
+        <!-- Chart: Department Doctors Distribution -->
+        <div class="col-lg-8">
+            <div class="chart-card shadow-sm p-4 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5 class="fw-bold text-dark mb-0">Clinical Department Overview</h5>
+                        <p class="text-muted small mb-0">Specialist physician distribution by department</p>
+                    </div>
+                    <span class="badge bg-light text-muted border">Live Data</span>
+                </div>
+                <div style="height: 260px;">
+                    <canvas id="deptChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions & Financial KPI -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="fw-bold text-dark mb-3">Billing & Revenue</h5>
+                        <div class="p-3 bg-light rounded-3 mb-3 border">
+                            <span class="text-muted small d-block">Collected Revenue (Paid)</span>
+                            <span class="fs-3 fw-bold text-success">${{ total_revenue|floatformat:2 }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between small text-muted mb-3 px-1">
+                            <span>Pending Invoices:</span>
+                            <span class="fw-bold text-warning">{{ pending_invoices_count }} Unpaid</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h6 class="fw-bold text-dark mb-2">Operational Shortcuts</h6>
+                        <div class="d-grid gap-2">
+                            <a href="{% url 'patient_create' %}" class="btn btn-outline-primary text-start">
+                                <i class="bi bi-person-plus me-2"></i> Register New Patient
+                            </a>
+                            <a href="{% url 'appointment_create' %}" class="btn btn-outline-primary text-start">
+                                <i class="bi bi-calendar-plus me-2"></i> Schedule Patient Visit
+                            </a>
+                            <a href="{% url 'record_create' %}" class="btn btn-outline-primary text-start">
+                                <i class="bi bi-clipboard2-plus me-2"></i> New Medical Examination
+                            </a>
+                            <a href="{% url 'invoice_create' %}" class="btn btn-outline-primary text-start">
+                                <i class="bi bi-receipt-cutoff me-2"></i> Generate Patient Bill
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tables Row: Today's Appointments & Recent Patients -->
+    <div class="row g-4">
+        <!-- Today's Appointments -->
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-white border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="fw-bold text-dark mb-1">Today's Appointment Schedule</h5>
+                        <p class="text-muted small mb-0">Scheduled consultations and procedures</p>
+                    </div>
+                    <a href="{% url 'appointment_list' %}?date=today" class="btn btn-sm btn-link text-primary text-decoration-none">View All</a>
+                </div>
+                <div class="card-body p-3">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Patient</th>
+                                    <th>Doctor</th>
+                                    <th>Status</th>
+                                    <th class="text-end">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for apt in today_appointments %}
+                                    <tr>
+                                        <td class="fw-semibold text-primary">{{ apt.appointment_time|time:"H:i" }}</td>
+                                        <td>
+                                            <a href="{% url 'patient_detail' apt.patient.pk %}" class="text-decoration-none fw-semibold text-dark">
+                                                {{ apt.patient.full_name }}
+                                            </a>
+                                            <span class="d-block small text-muted">{{ apt.patient.patient_id }}</span>
+                                        </td>
+                                        <td>Dr. {{ apt.doctor.full_name }}</td>
+                                        <td>
+                                            {% if apt.status == 'SCHEDULED' %}
+                                                <span class="badge bg-warning-subtle text-warning">Scheduled</span>
+                                            {% elif apt.status == 'IN_PROGRESS' %}
+                                                <span class="badge bg-info-subtle text-info">In Progress</span>
+                                            {% elif apt.status == 'COMPLETED' %}
+                                                <span class="badge bg-success-subtle text-success">Completed</span>
+                                            {% elif apt.status == 'CANCELLED' %}
+                                                <span class="badge bg-danger-subtle text-danger">Cancelled</span>
+                                            {% else %}
+                                                <span class="badge bg-secondary-subtle text-secondary">{{ apt.status }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-end">
+                                            <a href="{% url 'appointment_detail' apt.pk %}" class="btn btn-sm btn-light border">
+                                                <i class="bi bi-chevron-right"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="5" class="text-center py-4 text-muted">
+                                            <i class="bi bi-calendar-x fs-3 d-block mb-2"></i>
+                                            No appointments scheduled for today yet.
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Registered Patients -->
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-white border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="fw-bold text-dark mb-1">New Patients</h5>
+                        <p class="text-muted small mb-0">Recently added patient profiles</p>
+                    </div>
+                    <a href="{% url 'patient_list' %}" class="btn btn-sm btn-link text-primary text-decoration-none">View Directory</a>
+                </div>
+                <div class="card-body p-3">
+                    <div class="list-group list-group-flush">
+                        {% for p in recent_patients %}
+                            <div class="list-group-item d-flex align-items-center justify-content-between px-2 py-3 border-bottom">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="avatar-circle">
+                                        {{ p.first_name|slice:":1" }}{{ p.last_name|slice:":1" }}
+                                    </div>
+                                    <div>
+                                        <a href="{% url 'patient_detail' p.pk %}" class="text-decoration-none fw-semibold text-dark d-block">
+                                            {{ p.full_name }}
+                                        </a>
+                                        <span class="small text-muted">{{ p.patient_id }} • {{ p.blood_group }} • Age {{ p.age|default:"--" }}</span>
+                                    </div>
+                                </div>
+                                <span class="badge bg-light text-secondary border">{{ p.get_status_display }}</span>
+                            </div>
+                        {% empty %}
+                            <p class="text-muted text-center py-4 mb-0">No patient records found.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const ctx = document.getElementById('deptChart');
+        if (ctx) {
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: {{ dept_labels|safe }},
+                    datasets: [{
+                        label: 'Active Specialists',
+                        data: {{ dept_doctor_counts|safe }},
+                        backgroundColor: '#3b82f6',
+                        borderRadius: 6,
+                        maxBarThickness: 38
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1 },
+                            grid: { color: '#f1f5f9' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

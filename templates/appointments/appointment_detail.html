@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block title %}Appointment {{ appointment.appointment_id }} | HMS 2025{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-0" style="max-width: 900px;">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'appointment_list' %}">Appointments</a></li>
+            <li class="breadcrumb-item active">{{ appointment.appointment_id }}</li>
+        </ol>
+    </nav>
+
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-body p-4">
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+                <div>
+                    <span class="badge bg-primary-subtle text-primary font-monospace fs-6">{{ appointment.appointment_id }}</span>
+                    <h3 class="fw-bold text-dark mt-2 mb-0">Consultation Appointment</h3>
+                </div>
+                <div>
+                    {% if appointment.status == 'SCHEDULED' %}
+                        <span class="badge bg-warning-subtle text-warning fs-6 px-3 py-2 border border-warning-subtle">Status: Scheduled</span>
+                    {% elif appointment.status == 'IN_PROGRESS' %}
+                        <span class="badge bg-info-subtle text-info fs-6 px-3 py-2 border border-info-subtle">Status: In Progress</span>
+                    {% elif appointment.status == 'COMPLETED' %}
+                        <span class="badge bg-success-subtle text-success fs-6 px-3 py-2 border border-success-subtle">Status: Completed</span>
+                    {% elif appointment.status == 'CANCELLED' %}
+                        <span class="badge bg-danger-subtle text-danger fs-6 px-3 py-2 border border-danger-subtle">Status: Cancelled</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Grid Details -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <div class="p-3 bg-light rounded-3 border">
+                        <span class="text-muted small fw-bold text-uppercase d-block mb-1">Patient Information</span>
+                        <h5 class="fw-bold mb-1">
+                            <a href="{% url 'patient_detail' appointment.patient.pk %}" class="text-decoration-none text-dark">
+                                {{ appointment.patient.full_name }}
+                            </a>
+                        </h5>
+                        <div class="small text-muted">ID: {{ appointment.patient.patient_id }}</div>
+                        <div class="small text-muted">Phone: {{ appointment.patient.phone }}</div>
+                        <div class="small text-muted">Blood Group: <strong>{{ appointment.patient.blood_group }}</strong></div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="p-3 bg-light rounded-3 border">
+                        <span class="text-muted small fw-bold text-uppercase d-block mb-1">Assigned Physician</span>
+                        <h5 class="fw-bold mb-1">
+                            <a href="{% url 'doctor_detail' appointment.doctor.pk %}" class="text-decoration-none text-dark">
+                                Dr. {{ appointment.doctor.full_name }}
+                            </a>
+                        </h5>
+                        <div class="small text-muted">Specialty: {{ appointment.doctor.specialization }}</div>
+                        <div class="small text-muted">Department: {{ appointment.doctor.department.name }}</div>
+                        <div class="small text-muted">Room: {{ appointment.doctor.room_number|default:"TBD" }}</div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="text-muted small fw-bold text-uppercase d-block">Scheduled Date & Time</label>
+                    <div class="fs-5 fw-bold text-primary">
+                        <i class="bi bi-calendar-event me-2"></i>{{ appointment.appointment_date }} at {{ appointment.appointment_time|time:"H:i" }}
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="text-muted small fw-bold text-uppercase d-block">Consultation Fee</label>
+                    <div class="fs-5 fw-bold text-success">
+                        <i class="bi bi-cash me-2"></i>${{ appointment.doctor.consultation_fee }}
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label class="text-muted small fw-bold text-uppercase d-block">Reason for Consultation</label>
+                    <p class="text-dark bg-white border p-3 rounded-3 mb-0">{{ appointment.reason_for_visit }}</p>
+                </div>
+
+                {% if appointment.doctor_notes %}
+                    <div class="col-12">
+                        <label class="text-muted small fw-bold text-uppercase d-block">Physician Notes & Clinical Remarks</label>
+                        <p class="text-secondary bg-white border p-3 rounded-3 mb-0">{{ appointment.doctor_notes }}</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Quick Status Transition Actions -->
+            <div class="p-3 bg-light rounded-3 border mb-4">
+                <span class="small fw-bold text-muted text-uppercase d-block mb-2">Update Consultation Workflow</span>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{% url 'appointment_status_update' appointment.pk 'IN_PROGRESS' %}" class="btn btn-outline-info btn-sm rounded-pill px-3">
+                        <i class="bi bi-play-circle me-1"></i> Mark In-Progress
+                    </a>
+                    <a href="{% url 'appointment_status_update' appointment.pk 'COMPLETED' %}" class="btn btn-outline-success btn-sm rounded-pill px-3">
+                        <i class="bi bi-check2-circle me-1"></i> Mark Completed
+                    </a>
+                    <a href="{% url 'appointment_status_update' appointment.pk 'CANCELLED' %}" class="btn btn-outline-danger btn-sm rounded-pill px-3">
+                        <i class="bi bi-x-circle me-1"></i> Cancel Appointment
+                    </a>
+                    <a href="{% url 'appointment_status_update' appointment.pk 'NO_SHOW' %}" class="btn btn-outline-secondary btn-sm rounded-pill px-3">
+                        <i class="bi bi-person-x me-1"></i> Mark No-Show
+                    </a>
+                </div>
+            </div>
+
+            <!-- Follow-up Actions -->
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pt-3 border-top">
+                <div class="d-flex gap-2">
+                    <a href="{% url 'record_create' %}?patient_id={{ appointment.patient.pk }}&doctor_id={{ appointment.doctor.pk }}&appointment_id={{ appointment.pk }}" class="btn btn-emerald btn-sm rounded-pill px-3">
+                        <i class="bi bi-clipboard2-pulse me-1"></i> Record Examination / Prescription
+                    </a>
+                    <a href="{% url 'invoice_create' %}?patient_id={{ appointment.patient.pk }}&appointment_id={{ appointment.pk }}" class="btn btn-primary btn-sm rounded-pill px-3">
+                        <i class="bi bi-receipt me-1"></i> Bill Patient
+                    </a>
+                </div>
+                <div>
+                    <a href="{% url 'appointment_update' appointment.pk %}" class="btn btn-outline-secondary btn-sm rounded-pill px-3">
+                        <i class="bi bi-pencil me-1"></i> Reschedule / Edit
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

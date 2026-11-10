@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}Doctors & Medical Staff{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-0">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+        <div>
+            <h3 class="fw-bold text-dark mb-1">Doctors & Medical Specialists</h3>
+            <p class="text-muted mb-0">Browse physician schedules, department affiliations, and consultation fees.</p>
+        </div>
+        <a href="{% url 'doctor_create' %}" class="btn btn-primary px-3 shadow-sm rounded-pill">
+            <i class="bi bi-person-plus me-1"></i> Add Doctor
+        </a>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-body p-3">
+            <form method="GET" class="row g-2 align-items-center">
+                <div class="col-md-7">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-search"></i></span>
+                        <input type="text" name="search" class="form-control border-start-0" placeholder="Search by name, specialization, doctor ID..." value="{{ search_query }}">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <select name="department" class="form-select">
+                        <option value="">All Departments</option>
+                        {% for d in departments %}
+                            <option value="{{ d.pk }}" {% if selected_department == d.pk|stringformat:"s" %}selected{% endif %}>{{ d.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary w-100">Filter</button>
+                    {% if search_query or selected_department %}
+                        <a href="{% url 'doctor_list' %}" class="btn btn-outline-secondary"><i class="bi bi-x-lg"></i></a>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Doctor Grid Cards -->
+    <div class="row g-4">
+        {% for doc in page_obj %}
+            <div class="col-md-6 col-xl-4">
+                <div class="card border-0 shadow-sm rounded-4 h-100">
+                    <div class="card-body p-4 d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div class="avatar-circle" style="width: 52px; height: 52px; font-size: 1.25rem;">
+                                    Dr
+                                </div>
+                                <div>
+                                    {% if doc.is_active %}
+                                        <span class="badge bg-success-subtle text-success">Active</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary-subtle text-secondary">On Leave</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <h5 class="fw-bold text-dark mb-1">
+                                <a href="{% url 'doctor_detail' doc.pk %}" class="text-decoration-none text-dark">
+                                    Dr. {{ doc.full_name }}
+                                </a>
+                            </h5>
+                            <span class="badge bg-primary-subtle text-primary mb-2">{{ doc.specialization }}</span>
+                            <div class="text-muted small mb-3">
+                                <div><i class="bi bi-building me-1 text-secondary"></i>{{ doc.department.name }}</div>
+                                <div><i class="bi bi-mortarboard me-1 text-secondary"></i>{{ doc.qualification }} • {{ doc.experience_years }} yrs exp</div>
+                                <div><i class="bi bi-geo-alt me-1 text-secondary"></i>Room: {{ doc.room_number|default:"TBD" }}</div>
+                            </div>
+                        </div>
+
+                        <div class="pt-3 border-top d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="small text-muted d-block">Consultation Fee</span>
+                                <span class="fw-bold text-success fs-5">${{ doc.consultation_fee }}</span>
+                            </div>
+                            <div class="btn-group btn-group-sm">
+                                <a href="{% url 'appointment_create' %}?doctor_id={{ doc.pk }}" class="btn btn-primary rounded-pill px-3">
+                                    <i class="bi bi-calendar-plus me-1"></i> Book
+                                </a>
+                                <a href="{% url 'doctor_detail' doc.pk %}" class="btn btn-outline-secondary rounded-pill px-3 ms-1">
+                                    Profile
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12 text-center py-5">
+                <i class="bi bi-heart-pulse fs-1 text-muted d-block mb-2"></i>
+                <h5>No doctors found</h5>
+                <p class="text-muted small">Try a different search query or department filter.</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+        <div class="d-flex justify-content-center mt-4">
+            <nav>
+                <ul class="pagination pagination-sm">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                    {% endif %}
+                    <li class="page-item active"><span class="page-link">{{ page_obj.number }}</span></li>
+                    {% if page_obj.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

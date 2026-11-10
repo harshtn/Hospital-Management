@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Hospital Management System{% endblock %} | HMS 2025</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/custom.css">
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-light">
+
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary-custom sticky-top shadow-sm">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="{% url 'dashboard' %}">
+                <span class="brand-icon"><i class="bi bi-hospital"></i></span>
+                <span>MediCare <span class="badge bg-emerald text-dark fw-semibold ms-1">HMS 2025</span></span>
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#topNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="topNav">
+                <form class="d-flex mx-auto col-12 col-lg-5 my-2 my-lg-0" action="{% url 'patient_list' %}" method="GET">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
+                        <input class="form-control border-start-0 ps-0" type="search" name="search" placeholder="Search patient ID, name, or phone..." aria-label="Search">
+                        <button class="btn btn-emerald" type="submit">Search</button>
+                    </div>
+                </form>
+
+                <ul class="navbar-nav ms-auto align-items-center gap-2">
+                    <li class="nav-item">
+                        <a href="{% url 'appointment_create' %}" class="btn btn-sm btn-outline-light rounded-pill px-3">
+                            <i class="bi bi-calendar-plus me-1"></i> Book Appointment
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'patient_create' %}" class="btn btn-sm btn-light rounded-pill px-3 fw-semibold text-primary">
+                            <i class="bi bi-person-plus me-1"></i> New Patient
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white d-flex align-items-center gap-2" href="#" id="userMenu" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle fs-5"></i>
+                            <span class="d-none d-md-inline">{% if user.is_authenticated %}{{ user.username }}{% else %}Staff Portal{% endif %}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
+                            {% if user.is_authenticated %}
+                                <li><a class="dropdown-item" href="/admin/"><i class="bi bi-shield-lock me-2"></i>Django Admin</a></li>
+                                <li><a class="dropdown-item" href="{% url 'api_docs' %}"><i class="bi bi-code-slash me-2"></i>REST APIs</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="bi bi-box-arrow-right me-2"></i>Sign Out</a></li>
+                            {% else %}
+                                <li><a class="dropdown-item" href="{% url 'login' %}"><i class="bi bi-box-arrow-in-right me-2"></i>Sign In</a></li>
+                                <li><a class="dropdown-item" href="{% url 'register' %}"><i class="bi bi-person-plus me-2"></i>Register Staff</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- App Layout Container -->
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <aside class="sidebar-wrapper d-none d-lg-block">
+            <div class="sidebar-heading px-4 py-3 text-muted text-uppercase fw-bold small">Navigation</div>
+            <ul class="nav flex-column mb-auto sidebar-nav">
+                <li class="nav-item">
+                    <a href="{% url 'dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                        <i class="bi bi-grid-1x2 me-3"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'patient_list' %}" class="nav-link {% if 'patients' in request.path %}active{% endif %}">
+                        <i class="bi bi-people me-3"></i> Patients
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'doctor_list' %}" class="nav-link {% if 'doctors' in request.path %}active{% endif %}">
+                        <i class="bi bi-heart-pulse me-3"></i> Doctors & Staff
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'appointment_list' %}" class="nav-link {% if 'appointments' in request.path %}active{% endif %}">
+                        <i class="bi bi-calendar2-check me-3"></i> Appointments
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'record_list' %}" class="nav-link {% if 'medical-records' in request.path %}active{% endif %}">
+                        <i class="bi bi-clipboard2-pulse me-3"></i> Medical Records
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'invoice_list' %}" class="nav-link {% if 'billing' in request.path %}active{% endif %}">
+                        <i class="bi bi-receipt me-3"></i> Billing & Invoices
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-heading px-4 py-3 text-muted text-uppercase fw-bold small mt-3">Developer & Admin</div>
+            <ul class="nav flex-column sidebar-nav">
+                <li class="nav-item">
+                    <a href="{% url 'api_docs' %}" class="nav-link {% if 'docs' in request.path %}active{% endif %}">
+                        <i class="bi bi-braces-asterisk me-3"></i> REST APIs & Docs
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/" target="_blank" class="nav-link">
+                        <i class="bi bi-database-gear me-3"></i> Admin Console <i class="bi bi-arrow-up-right small ms-auto"></i>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="p-3 mt-4 mx-3 rounded-4 bg-light border text-center">
+                <div class="small fw-semibold text-secondary">Database Engine</div>
+                <div class="badge bg-primary text-white mt-1 px-3 py-1">Python • Django • MySQL</div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="content-wrapper flex-grow-1 p-3 p-lg-4">
+            <!-- Flash Messages -->
+            {% if messages %}
+                <div class="container-fluid px-0 mb-3">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show shadow-sm border-0 d-flex align-items-center" role="alert">
+                            <i class="bi bi-info-circle-fill me-2 fs-5"></i>
+                            <div>{{ message }}</div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <!-- Custom JS -->
+    <script src="/static/js/app.js"></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

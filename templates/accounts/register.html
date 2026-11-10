@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Register Staff Account | HMS 2025{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-0 d-flex justify-content-center align-items-center" style="min-height: 70vh;">
+    <div class="card border-0 shadow-sm rounded-4" style="max-width: 460px; width: 100%;">
+        <div class="card-body p-4 p-md-5">
+            <div class="text-center mb-4">
+                <div class="stat-icon bg-primary-subtle text-primary mx-auto mb-3" style="width: 56px; height: 56px; font-size: 1.75rem;">
+                    <i class="bi bi-person-plus-fill"></i>
+                </div>
+                <h4 class="fw-bold text-dark mb-1">Create Staff Account</h4>
+                <p class="text-muted small mb-0">Register staff access credentials</p>
+            </div>
+
+            <form method="POST" novalidate>
+                {% csrf_token %}
+                {% if form.errors %}
+                    <div class="alert alert-danger py-2 small">
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                {{ error }}<br>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            {{ error }}<br>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% for field in form %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <div class="form-text small text-muted">{{ field.help_text|safe }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-primary fw-semibold py-2">Create Account</button>
+                </div>
+            </form>
+
+            <div class="text-center mt-3 small">
+                <span class="text-muted">Already registered?</span>
+                <a href="{% url 'login' %}" class="fw-semibold text-primary text-decoration-none">Sign In</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign In | Hospital Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-0 d-flex justify-content-center align-items-center" style="min-height: 70vh;">
+    <div class="card border-0 shadow-sm rounded-4" style="max-width: 440px; width: 100%;">
+        <div class="card-body p-4 p-md-5">
+            <div class="text-center mb-4">
+                <div class="stat-icon bg-primary-subtle text-primary mx-auto mb-3" style="width: 56px; height: 56px; font-size: 1.75rem;">
+                    <i class="bi bi-hospital"></i>
+                </div>
+                <h4 class="fw-bold text-dark mb-1">Staff & Doctor Sign In</h4>
+                <p class="text-muted small mb-0">MediCare Hospital Management System 2025</p>
+            </div>
+
+            <form method="POST" novalidate>
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger py-2 small">{{ form.non_field_errors.0 }}</div>
+                {% endif %}
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Username</label>
+                    <input type="text" name="username" class="form-control" placeholder="e.g. admin or physician" required autofocus>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Password</label>
+                    <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+                </div>
+
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-primary fw-semibold py-2">Sign In</button>
+                </div>
+            </form>
+
+            <div class="p-3 bg-light rounded-3 border mt-4 text-center">
+                <span class="small text-muted d-block fw-bold text-uppercase">Demo Admin Credentials:</span>
+                <span class="small font-monospace">Username: <strong>admin</strong> | Password: <strong>admin123</strong></span>
+            </div>
+
+            <div class="text-center mt-3 small">
+                <span class="text-muted">Need a new staff account?</span>
+                <a href="{% url 'register' %}" class="fw-semibold text-primary text-decoration-none">Register</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

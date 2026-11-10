@@ -1,0 +1,298 @@
+{% extends 'base.html' %}
+
+{% block title %}REST APIs & OpenAPI Documentation{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-0">
+    <!-- Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+        <div>
+            <h3 class="fw-bold text-dark mb-1">MediCare RESTful API Documentation</h3>
+            <p class="text-muted mb-0">Complete REST endpoints for third-party systems, mobile apps, and clinical integrations.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="/api/patients/?format=json" target="_blank" class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                <i class="bi bi-box-arrow-up-right me-1"></i> Open Raw JSON API
+            </a>
+            <a href="/api/analytics/summary/?format=json" target="_blank" class="btn btn-primary btn-sm rounded-pill px-3">
+                <i class="bi bi-graph-up me-1"></i> Analytics Feed
+            </a>
+        </div>
+    </div>
+
+    <!-- Quick Info Banner -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="p-3 bg-white border rounded-4 shadow-sm">
+                <span class="text-muted small fw-bold text-uppercase d-block">Base URL</span>
+                <span class="font-monospace text-primary fw-bold">/api/</span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-3 bg-white border rounded-4 shadow-sm">
+                <span class="text-muted small fw-bold text-uppercase d-block">Format</span>
+                <span class="font-monospace text-dark fw-bold">application/json</span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-3 bg-white border rounded-4 shadow-sm">
+                <span class="text-muted small fw-bold text-uppercase d-block">Authentication</span>
+                <span class="font-monospace text-success fw-bold">Session & Basic Auth</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- API Endpoints Catalog -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-header bg-white border-0 pt-4 px-4 pb-0">
+            <h5 class="fw-bold text-dark mb-1">Clinical Endpoints Reference</h5>
+            <p class="text-muted small mb-0">Explore each resource, supported HTTP verbs, and sample JSON.</p>
+        </div>
+        <div class="card-body p-4">
+            <div class="accordion accordion-flush" id="apiAccordion">
+
+                <!-- 1. Patients API -->
+                <div class="accordion-item border rounded-3 mb-3">
+                    <h2 class="accordion-header" id="headingPatients">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePatients">
+                            <span class="badge bg-success me-2">GET</span>
+                            <span class="badge bg-primary me-2">POST</span>
+                            <span class="font-monospace fw-bold text-dark">/api/patients/</span>
+                            <span class="text-muted small ms-auto me-3">Patient Registry CRUD operations</span>
+                        </button>
+                    </h2>
+                    <div id="collapsePatients" class="accordion-collapse collapse" data-bs-parent="#apiAccordion">
+                        <div class="accordion-body bg-light">
+                            <p class="small text-muted mb-2">Retrieve list of patients (paginated, supports <code>?search=</code>) or register a new patient via POST.</p>
+                            <div class="d-flex gap-2 mb-3">
+                                <a href="/api/patients/" target="_blank" class="btn btn-sm btn-outline-primary">Open Live Endpoint</a>
+                                <button class="btn btn-sm btn-light border" onclick="testEndpoint('/api/patients/')">Test in Console</button>
+                            </div>
+                            <span class="small fw-bold text-muted text-uppercase d-block mb-1">Sample Response Payload:</span>
+                            <pre class="bg-dark text-light p-3 rounded-3 small mb-0"><code>{
+  "count": 5,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 1,
+      "patient_id": "PAT-2501-8A1F",
+      "first_name": "James",
+      "last_name": "Wilson",
+      "full_name": "James Wilson",
+      "age": 42,
+      "gender": "M",
+      "blood_group": "O+",
+      "phone": "+1 555-2001",
+      "status": "ACTIVE"
+    }
+  ]
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Doctors API -->
+                <div class="accordion-item border rounded-3 mb-3">
+                    <h2 class="accordion-header" id="headingDoctors">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDoctors">
+                            <span class="badge bg-success me-2">GET</span>
+                            <span class="badge bg-primary me-2">POST</span>
+                            <span class="font-monospace fw-bold text-dark">/api/doctors/</span>
+                            <span class="text-muted small ms-auto me-3">Physicians, specialties & schedules</span>
+                        </button>
+                    </h2>
+                    <div id="collapseDoctors" class="accordion-collapse collapse" data-bs-parent="#apiAccordion">
+                        <div class="accordion-body bg-light">
+                            <p class="small text-muted mb-2">Query doctor profiles. Specialized sub-route: <code>/api/doctors/available/</code> for doctors on duty.</p>
+                            <div class="d-flex gap-2 mb-3">
+                                <a href="/api/doctors/" target="_blank" class="btn btn-sm btn-outline-primary">Open Live Endpoint</a>
+                                <button class="btn btn-sm btn-light border" onclick="testEndpoint('/api/doctors/')">Test in Console</button>
+                            </div>
+                            <pre class="bg-dark text-light p-3 rounded-3 small mb-0"><code>[
+  {
+    "id": 1,
+    "doctor_id": "DOC-91F2",
+    "full_name": "Robert Vance",
+    "department_name": "Cardiology",
+    "specialization": "Interventional Cardiologist",
+    "consultation_fee": "150.00",
+    "available_days": "Monday, Wednesday, Friday",
+    "is_active": true
+  }
+]</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Appointments API -->
+                <div class="accordion-item border rounded-3 mb-3">
+                    <h2 class="accordion-header" id="headingAppointments">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAppointments">
+                            <span class="badge bg-success me-2">GET</span>
+                            <span class="badge bg-primary me-2">POST</span>
+                            <span class="badge bg-warning text-dark me-2">PUT / PATCH</span>
+                            <span class="font-monospace fw-bold text-dark">/api/appointments/</span>
+                            <span class="text-muted small ms-auto me-3">Consultation booking & slot management</span>
+                        </button>
+                    </h2>
+                    <div id="collapseAppointments" class="accordion-collapse collapse" data-bs-parent="#apiAccordion">
+                        <div class="accordion-body bg-light">
+                            <p class="small text-muted mb-2">Book or reschedule consultations. Includes <code>/api/appointments/today/</code> for daily hospital roster.</p>
+                            <div class="d-flex gap-2 mb-3">
+                                <a href="/api/appointments/" target="_blank" class="btn btn-sm btn-outline-primary">Open Live Endpoint</a>
+                                <button class="btn btn-sm btn-light border" onclick="testEndpoint('/api/appointments/')">Test in Console</button>
+                            </div>
+                            <pre class="bg-dark text-light p-3 rounded-3 small mb-0"><code>{
+  "id": 1,
+  "appointment_id": "APT-2501-A12B",
+  "patient_name": "James Wilson",
+  "doctor_name": "Robert Vance",
+  "department_name": "Cardiology",
+  "appointment_date": "2026-11-10",
+  "appointment_time": "09:30:00",
+  "status": "SCHEDULED",
+  "reason_for_visit": "Routine cardiovascular checkup"
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Medical Records API -->
+                <div class="accordion-item border rounded-3 mb-3">
+                    <h2 class="accordion-header" id="headingRecords">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRecords">
+                            <span class="badge bg-success me-2">GET</span>
+                            <span class="badge bg-primary me-2">POST</span>
+                            <span class="font-monospace fw-bold text-dark">/api/medical-records/</span>
+                            <span class="text-muted small ms-auto me-3">EHR vitals, diagnoses & prescriptions</span>
+                        </button>
+                    </h2>
+                    <div id="collapseRecords" class="accordion-collapse collapse" data-bs-parent="#apiAccordion">
+                        <div class="accordion-body bg-light">
+                            <p class="small text-muted mb-2">Electronic Health Records (EHR) with nested prescription line items.</p>
+                            <div class="d-flex gap-2 mb-3">
+                                <a href="/api/medical-records/" target="_blank" class="btn btn-sm btn-outline-primary">Open Live Endpoint</a>
+                                <button class="btn btn-sm btn-light border" onclick="testEndpoint('/api/medical-records/')">Test in Console</button>
+                            </div>
+                            <pre class="bg-dark text-light p-3 rounded-3 small mb-0"><code>{
+  "record_id": "REC-2501-7F89",
+  "patient_name": "Alexander Wright",
+  "doctor_name": "Robert Vance",
+  "diagnosis": "Essential Hypertension",
+  "blood_pressure": "128/82",
+  "prescriptions": [
+    {
+      "medication_name": "Lisinopril",
+      "dosage": "20mg",
+      "frequency": "Once daily",
+      "duration_days": 90
+    }
+  ]
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Invoices API -->
+                <div class="accordion-item border rounded-3 mb-3">
+                    <h2 class="accordion-header" id="headingInvoices">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInvoices">
+                            <span class="badge bg-success me-2">GET</span>
+                            <span class="badge bg-primary me-2">POST</span>
+                            <span class="font-monospace fw-bold text-dark">/api/invoices/</span>
+                            <span class="text-muted small ms-auto me-3">Patient billing & payments</span>
+                        </button>
+                    </h2>
+                    <div id="collapseInvoices" class="accordion-collapse collapse" data-bs-parent="#apiAccordion">
+                        <div class="accordion-body bg-light">
+                            <div class="d-flex gap-2 mb-3">
+                                <a href="/api/invoices/" target="_blank" class="btn btn-sm btn-outline-primary">Open Live Endpoint</a>
+                                <button class="btn btn-sm btn-light border" onclick="testEndpoint('/api/invoices/')">Test in Console</button>
+                            </div>
+                            <pre class="bg-dark text-light p-3 rounded-3 small mb-0"><code>{
+  "invoice_id": "INV-2501-CC91",
+  "patient_name": "James Wilson",
+  "total_amount": "157.50",
+  "paid_amount": "0.00",
+  "balance_due": "157.50",
+  "payment_status": "PENDING"
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. Analytics API -->
+                <div class="accordion-item border rounded-3 mb-3">
+                    <h2 class="accordion-header" id="headingAnalytics">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAnalytics">
+                            <span class="badge bg-success me-2">GET</span>
+                            <span class="font-monospace fw-bold text-dark">/api/analytics/summary/</span>
+                            <span class="text-muted small ms-auto me-3">Aggregated metrics & operational KPIs</span>
+                        </button>
+                    </h2>
+                    <div id="collapseAnalytics" class="accordion-collapse collapse" data-bs-parent="#apiAccordion">
+                        <div class="accordion-body bg-light">
+                            <div class="d-flex gap-2 mb-3">
+                                <a href="/api/analytics/summary/" target="_blank" class="btn btn-sm btn-outline-primary">Open Live Endpoint</a>
+                                <button class="btn btn-sm btn-light border" onclick="testEndpoint('/api/analytics/summary/')">Test in Console</button>
+                            </div>
+                            <pre class="bg-dark text-light p-3 rounded-3 small mb-0"><code>{
+  "kpis": {
+    "total_patients": 5,
+    "total_doctors": 5,
+    "total_appointments": 5,
+    "total_revenue": 210.0,
+    "pending_invoices": 1
+  }
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Interactive Console -->
+    <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-header bg-white border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-center">
+            <h5 class="fw-bold text-dark mb-0"><i class="bi bi-terminal text-primary me-2"></i>Live Interactive API Tester</h5>
+            <span class="badge bg-success-subtle text-success">CORS Enabled</span>
+        </div>
+        <div class="card-body p-4">
+            <div class="input-group mb-3">
+                <span class="input-group-text font-monospace bg-light">GET</span>
+                <input type="text" id="apiEndpointInput" class="form-control font-monospace" value="/api/analytics/summary/">
+                <button class="btn btn-primary px-4" id="sendApiRequestBtn" onclick="runApiRequest()">Send Request</button>
+            </div>
+            <div>
+                <label class="small fw-bold text-muted text-uppercase d-block mb-1">Live Response Output:</label>
+                <pre id="apiConsoleOutput" class="bg-dark text-light p-3 rounded-3 small font-monospace" style="max-height: 350px; overflow-y: auto;">Click 'Send Request' or select an endpoint to test live...</pre>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    function testEndpoint(path) {
+        document.getElementById('apiEndpointInput').value = path;
+        runApiRequest();
+    }
+
+    async function runApiRequest() {
+        const path = document.getElementById('apiEndpointInput').value;
+        const output = document.getElementById('apiConsoleOutput');
+        output.textContent = "Fetching " + path + " ...";
+        try {
+            const resp = await fetch(path);
+            const data = await resp.json();
+            output.textContent = JSON.stringify(data, null, 2);
+        } catch (err) {
+            output.textContent = "Error executing request: " + err.message;
+        }
+    }
+</script>
+{% endblock %}
