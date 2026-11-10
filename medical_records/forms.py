@@ -44,3 +44,4 @@ PrescriptionFormSet = inlineformset_factory(
     extra=2,
     can_delete=True
 )
+

@@ -120,3 +120,4 @@ class AnalyticsSummaryView(APIView):
             'dept_distribution': dept_distribution,
             'status_distribution': status_distribution,
         })
+

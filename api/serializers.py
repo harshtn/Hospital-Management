@@ -100,3 +100,4 @@ class InvoiceSerializer(serializers.ModelSerializer):
             'tax', 'total_amount', 'paid_amount', 'balance_due',
             'payment_status', 'payment_method', 'notes', 'items', 'created_at'
         ]
+

@@ -80,3 +80,4 @@ class InvoiceItem(models.Model):
 
     def __str__(self):
         return f"{self.description} ({self.quantity} x {self.unit_price} = {self.total})"
+

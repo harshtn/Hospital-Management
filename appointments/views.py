@@ -114,3 +114,4 @@ def appointment_status_update(request, pk, new_status):
     else:
         messages.error(request, "Invalid status choice.")
     return redirect('appointment_detail', pk=pk)
+

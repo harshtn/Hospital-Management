@@ -88,3 +88,4 @@ def record_update(request, pk):
         'title': f"Edit Medical Record #{record.record_id}",
         'record': record
     })
+

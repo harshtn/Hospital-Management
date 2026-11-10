@@ -7,3 +7,4 @@ class AppointmentAdmin(admin.ModelAdmin):
     list_filter = ('status', 'appointment_date', 'doctor')
     search_fields = ('appointment_id', 'patient__first_name', 'patient__last_name', 'doctor__first_name', 'doctor__last_name', 'reason_for_visit')
     readonly_fields = ('appointment_id', 'created_at', 'updated_at')
+

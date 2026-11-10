@@ -97,3 +97,4 @@ def patient_delete(request, pk):
         messages.success(request, f"Patient {name} deleted successfully.")
         return redirect('patient_list')
     return render(request, 'patients/patient_confirm_delete.html', {'patient': patient})
+

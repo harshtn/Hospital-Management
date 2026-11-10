@@ -82,3 +82,4 @@ class Patient(models.Model):
             random_part = uuid.uuid4().hex[:4].upper()
             self.patient_id = f"PAT-{today_str}-{random_part}"
         super().save(*args, **kwargs)
+

@@ -5,3 +5,4 @@ django-cors-headers==4.9.0
 PyMySQL==1.2.4
 python-dotenv==1.2.4
 sqlparse==0.6.1
+

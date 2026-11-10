@@ -8,3 +8,4 @@ urlpatterns = [
     path('<int:pk>/edit/', views.appointment_update, name='appointment_update'),
     path('<int:pk>/status/<str:new_status>/', views.appointment_status_update, name='appointment_status_update'),
 ]
+

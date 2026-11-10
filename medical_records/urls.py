@@ -7,3 +7,4 @@ urlpatterns = [
     path('<int:pk>/', views.record_detail, name='record_detail'),
     path('<int:pk>/edit/', views.record_update, name='record_update'),
 ]
+

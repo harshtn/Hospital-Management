@@ -12,3 +12,4 @@ class InvoiceAdmin(admin.ModelAdmin):
     search_fields = ('invoice_id', 'patient__first_name', 'patient__last_name', 'patient__patient_id')
     readonly_fields = ('invoice_id', 'created_at', 'updated_at')
     inlines = [InvoiceItemInline]
+

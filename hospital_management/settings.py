@@ -153,3 +153,4 @@ CORS_ALLOW_ALL_ORIGINS = True
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'login'
+

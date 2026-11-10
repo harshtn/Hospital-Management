@@ -7,3 +7,4 @@ class DoctorAdmin(admin.ModelAdmin):
     list_filter = ('department', 'is_active')
     search_fields = ('doctor_id', 'first_name', 'last_name', 'specialization', 'email')
     readonly_fields = ('doctor_id', 'created_at')
+

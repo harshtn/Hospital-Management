@@ -40,3 +40,4 @@ class PatientForm(forms.ModelForm):
             if len(cleaned) < 7:
                 raise forms.ValidationError("Please provide a valid phone number (at least 7 digits).")
         return phone
+

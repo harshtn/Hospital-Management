@@ -83,3 +83,4 @@ def doctor_delete(request, pk):
         messages.success(request, f"Doctor Dr. {name} removed successfully.")
         return redirect('doctor_list')
     return render(request, 'doctors/doctor_confirm_delete.html', {'doctor': doctor})
+

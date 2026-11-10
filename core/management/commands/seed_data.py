@@ -274,3 +274,4 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.SUCCESS("Seeded Invoices and Billing line items."))
         self.stdout.write(self.style.SUCCESS("=== Hospital Management System Data Seed Completed Successfully! ==="))
+

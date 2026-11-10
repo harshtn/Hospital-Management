@@ -200,8 +200,8 @@ All endpoints return JSON and conform to standard REST conventions:
 
 ### 2. Clone the Repository
 ```bash
-git clone git@github.com:harshtn/Hospital-Management-System.git
-cd Hospital-Management-System
+git clone git@github.com:harshtn/Hospital-Management.git
+cd Hospital-Management
 ```
 
 ### 3. Create & Activate Virtual Environment
@@ -343,9 +343,10 @@ Hospital-Management-System/
 
 ## 🤝 Contributing
 Contributions, issues, and feature requests are welcome!
-Feel free to check [issues page](https://github.com/harshtn/Hospital-Management-System/issues).
+Feel free to check [issues page](https://github.com/harshtn/Hospital-Management/issues).
 
 ---
 
 ## 📄 License
 This project is licensed under the MIT License - see the LICENSE file for details.
+

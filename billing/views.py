@@ -115,3 +115,4 @@ def invoice_mark_paid(request, pk):
     invoice.save()
     messages.success(request, f"Invoice {invoice.invoice_id} marked as Paid in Full.")
     return redirect('invoice_detail', pk=pk)
+

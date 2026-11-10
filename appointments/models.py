@@ -43,3 +43,4 @@ class Appointment(models.Model):
             random_part = uuid.uuid4().hex[:4].upper()
             self.appointment_id = f"APT-{today_str}-{random_part}"
         super().save(*args, **kwargs)
+

@@ -161,3 +161,4 @@ CREATE TABLE IF NOT EXISTS `billing_invoiceitem` (
     `invoice_id` BIGINT NOT NULL,
     CONSTRAINT `fk_invoiceitem_invoice` FOREIGN KEY (`invoice_id`) REFERENCES `billing_invoice` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+

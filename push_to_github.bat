@@ -8,7 +8,7 @@ if %ERRORLEVEL% EQU 0 (
     echo.
     echo ========================================================
     echo SUCCESS! Repository uploaded to GitHub:
-    echo https://github.com/harshtn/Hospital-Management-System
+    echo https://github.com/harshtn/Hospital-Management
     echo ========================================================
 ) else (
     echo.
@@ -20,3 +20,4 @@ if %ERRORLEVEL% EQU 0 (
     echo 5. Run this script again!
 )
 pause
+

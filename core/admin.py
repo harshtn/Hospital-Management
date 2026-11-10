@@ -11,3 +11,4 @@ class RoomAdmin(admin.ModelAdmin):
     list_display = ('room_number', 'room_type', 'department', 'capacity', 'current_occupancy', 'status', 'cost_per_day')
     list_filter = ('room_type', 'status', 'department')
     search_fields = ('room_number',)
+

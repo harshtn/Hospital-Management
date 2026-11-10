@@ -20,3 +20,4 @@ urlpatterns = [
     path('analytics/summary/', views.AnalyticsSummaryView.as_view(), name='api_analytics_summary'),
     path('', include(router.urls)),
 ]
+

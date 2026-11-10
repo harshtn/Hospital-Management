@@ -41,3 +41,4 @@ class Doctor(models.Model):
             random_part = uuid.uuid4().hex[:4].upper()
             self.doctor_id = f"DOC-{random_part}"
         super().save(*args, **kwargs)
+

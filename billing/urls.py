@@ -9,3 +9,4 @@ urlpatterns = [
     path('<int:pk>/edit/', views.invoice_update, name='invoice_update'),
     path('<int:pk>/mark-paid/', views.invoice_mark_paid, name='invoice_mark_paid'),
 ]
+

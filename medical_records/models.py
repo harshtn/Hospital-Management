@@ -48,3 +48,4 @@ class PrescriptionItem(models.Model):
 
     def __str__(self):
         return f"{self.medication_name} ({self.dosage}) - {self.frequency}"
+

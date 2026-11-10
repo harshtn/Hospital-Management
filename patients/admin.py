@@ -7,3 +7,4 @@ class PatientAdmin(admin.ModelAdmin):
     list_filter = ('gender', 'blood_group', 'status')
     search_fields = ('patient_id', 'first_name', 'last_name', 'phone', 'email')
     readonly_fields = ('patient_id', 'created_at', 'updated_at')
+

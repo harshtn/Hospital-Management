@@ -43,3 +43,4 @@ class Room(models.Model):
 
     def __str__(self):
         return f"Room {self.room_number} - {self.get_room_type_display()} ({self.status})"
+

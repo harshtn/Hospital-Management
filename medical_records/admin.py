@@ -12,3 +12,4 @@ class MedicalRecordAdmin(admin.ModelAdmin):
     search_fields = ('record_id', 'patient__first_name', 'patient__last_name', 'diagnosis', 'symptoms')
     readonly_fields = ('record_id', 'created_at')
     inlines = [PrescriptionItemInline]
+

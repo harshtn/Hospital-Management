@@ -26,3 +26,4 @@ class DoctorForm(forms.ModelForm):
             'time_slot_end': forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'}),
             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
+
